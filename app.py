@@ -95,7 +95,22 @@ with col1:
 
     # Drawing
     nodes = nx.draw_networkx_nodes(G, pos, node_size=node_sizes, node_color=node_colors, cmap=plt.cm.viridis, ax=ax)
-    nx.draw_networkx_edges(G, pos, edge_color=edge_colors, width=2, ax=ax, arrows=is_directed)
+    
+    # UPDATED SECTION START
+    nx.draw_networkx_edges(
+        G, 
+        pos, 
+        edge_color=edge_colors, 
+        width=2, 
+        ax=ax, 
+        arrows=is_directed,
+        arrowsize=20,          # Makes the arrowheads larger
+        arrowstyle='->',       # Defines a clear arrow shape
+        node_size=node_sizes,  # Helps NetworkX calculate where the line should stop
+        connectionstyle="arc3,rad=0.1" # Adds a slight curve so overlapping arrows are visible
+    )
+    # UPDATED SECTION END
+
     nx.draw_networkx_labels(G, pos, font_size=10, font_color="white", ax=ax)
     
     plt.axis("off")
