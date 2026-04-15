@@ -6,25 +6,25 @@ import pandas as pd
 # Page configuration
 st.set_page_config(page_title="NetworkX Explorer", layout="wide")
 
-## --- Functions ---
+# --- Functions ---
 
 def generate_graph(nodes, probability):
-    # Erdos-Renyi graph: common model for social networks
+    # Erdos-Renyi graph: a standard model for generating random networks
     return nx.erdos_renyi_graph(n=nodes, p=probability)
 
-## --- Sidebar Controls ---
+# --- Sidebar Controls ---
 
 st.sidebar.header("Network Settings")
 node_count = st.sidebar.slider("Number of Nodes", 10, 100, 30)
 edge_prob = st.sidebar.slider("Edge Probability", 0.01, 0.20, 0.05)
 layout_type = st.sidebar.selectbox("Layout Style", ["Spring", "Circular", "Shell", "Spectral"])
 
-## --- Main UI ---
+# --- Main UI ---
 
 st.title("🕸️ NetworkX Concept: Social Connectivity")
 st.markdown("""
-This app demonstrates **Graph Theory** concepts. In this network, 'Nodes' represent people, 
-and 'Edges' represent a connection or friendship between them.
+This app demonstrates **Graph Theory** concepts. In this network, **Nodes** represent people, 
+and **Edges** represent a connection or friendship between them.
 """)
 
 # Generate the graph object
@@ -36,7 +36,7 @@ with col1:
     st.subheader("Network Visualization")
     fig, ax = plt.subplots(figsize=(10, 7))
     
-    # Choose layout
+    # Choose layout based on user selection
     if layout_type == "Spring":
         pos = nx.spring_layout(G)
     elif layout_type == "Circular":
@@ -55,26 +55,14 @@ with col1:
 with col2:
     st.subheader("Network Metrics")
     
-    # Concept: Degree Centrality (Who is the most "popular"?)
+    # Concept: Degree Centrality (Who has the most connections?)
     centrality = nx.degree_centrality(G)
-    df_centrality = pd.DataFrame(centrality.items(), columns=["Node", "Centrality Score"])
-    df_centrality = df_centrality.sort_values(by="Centrality Score", ascending=False)
+    df_centrality = pd.DataFrame(centrality.items(), columns=["Node", "Score"])
+    df_centrality = df_centrality.sort_values(by="Score", ascending=False)
 
     st.write("**Top Influencers (Degree Centrality)**")
     st.dataframe(df_centrality.head(10), use_container_width=True)
 
     # General Stats
     st.metric("Total Connections", G.number_of_edges())
-    st.metric("Average Clustering", round(nx.average_clustering(G), 3))
-
----
-
-### 2. The Requirements File (`requirements.txt`)
-
-For Streamlit Cloud to run your app, you **must** create a second file in the same GitHub folder named `requirements.txt`. Paste these lines inside:
-
-```text
-streamlit
-networkx
-matplotlib
-pandas
+    st.metric("Avg Clustering Coefficient", round(nx.average_clustering(G), 3))
